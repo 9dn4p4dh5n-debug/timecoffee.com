@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="kk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIME COFFEE — Өзіңе уақыт бөл</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            dark: '#2C1810',
+                            roast: '#3D2314',
+                            medium: '#6F4E37',
+                            warm: '#8B5A2B',
+                            accent: '#D4A373',
+                            beige: '#E6CCB2',
+                            light: '#F5EBE6',
+                            bg: '#FAF7F2'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF7F2;
+            color: #2C1810;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-overlay {
+            background: linear-gradient(180deg, rgba(44,24,16,0.75) 0%, rgba(61,35,20,0.85) 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 163, 115, 0.2);
+        }
+        .glass-nav {
+            background: rgba(250, 247, 242, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4A373;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B5A2B;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-coffee-accent selection:text-white">
+
+    <!-- Header Navigation -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 glass-nav border-b border-coffee-beige/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <span class="text-3xl transition-transform group-hover:scale-110 duration-300">☕</span>
+                <div>
+                    <span class="font-playfair text-2xl font-bold tracking-wider text-coffee-roast block leading-none">TIME COFFEE</span>
+                    <span class="text-[10px] uppercase tracking-widest text-coffee-warm font-medium">Coffee & Mood</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-coffee-roast/90">
+                <a href="#hero" class="hover:text-coffee-warm transition-colors duration-200 py-1 border-b-2 border-transparent hover:border-coffee-accent">Басты бет</a>
+                <a href="#menu" class="hover:text-coffee-warm transition-colors duration-200 py-1 border-b-2 border-transparent hover:border-coffee-accent">Мәзір</a>
+                <a href="#about" class="hover:text-coffee-warm transition-colors duration-200 py-1 border-b-2 border-transparent hover:border-coffee-accent">Біз туралы</a>
+                <a href="#gallery" class="hover:text-coffee-warm transition-colors duration-200 py-1 border-b-2 border-transparent hover:border-coffee-accent">Галерея</a>
+                <a href="#contact" class="hover:text-coffee-warm transition-colors duration-200 py-1 border-b-2 border-transparent hover:border-coffee-accent">Байланыс</a>
+            </nav>
+
+            <!-- Actions & Cart trigger -->
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCartModal()" class="relative p-2.5 rounded-full bg-coffee-light hover:bg-coffee-beige/60 text-coffee-roast transition-all duration-300 shadow-sm" title="Себет">
+                    <i class="fa-solid fa-shopping-bag text-lg"></i>
+                    <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-coffee-warm text-white text-[11px] font-bold rounded-full h-5 w-5 flex items-center justify-center animate-bounce">0</span>
+                </button>
+                <a href="#menu" class="hidden sm:inline-flex items-center gap-2 bg-coffee-roast hover:bg-coffee-dark text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                    <span>Мәзірді көру</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+                
+                <!-- Mobile menu toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-coffee-roast hover:bg-coffee-light">
+                    <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-coffee-bg border-b border-coffee-beige px-6 py-6 space-y-4 shadow-xl">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block text-coffee-roast font-medium hover:text-coffee-warm">Басты бет</a>
+            <a href="#menu" onclick="toggleMobileMenu()" class="block text-coffee-roast font-medium hover:text-coffee-warm">Мәзір</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block text-coffee-roast font-medium hover:text-coffee-warm">Біз туралы</a>
+            <a href="#gallery" onclick="toggleMobileMenu()" class="block text-coffee-roast font-medium hover:text-coffee-warm">Галерея</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block text-coffee-roast font-medium hover:text-coffee-warm">Байланыс</a>
+            <a href="#menu" onclick="toggleMobileMenu()" class="inline-block w-full text-center bg-coffee-roast text-white py-3 rounded-xl font-medium">
+                Тапсырыс беру / Мәзір
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1920&auto=format&fit=crop" 
+                 alt="Coffee Shop Background" 
+                 class="w-full h-full object-cover scale-105 transition-transform duration-10000 hover:scale-100">
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 py-20 text-white space-y-8">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-coffee-beige text-sm font-medium tracking-wide">
+                <span class="w-2 h-2 rounded-full bg-coffee-accent animate-ping"></span>
+                Өзіңе уақыт бөл
+            </div>
+
+            <h1 class="font-playfair text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-amber-50 leading-tight">
+                «Өзіңе уақыт бөл.»
+            </h1>
+
+            <p class="text-base sm:text-lg md:text-xl text-coffee-light/90 max-w-2xl mx-auto leading-relaxed font-light">
+                <strong class="font-semibold text-white">TIME COFFEE</strong>-ге қош келдіңіз! 
+                Жылы атмосфера, хош иісті кофе және жағымды әңгімелер үшін жайлы орын. 
+                Күнделікті қарбаластан бір сәтке алыстап, өзіңізге уақыт бөліңіз.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#menu" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-coffee-accent hover:bg-amber-600 text-coffee-dark font-semibold px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+                    <span>Мәзірді көру</span>
+                    <i class="fa-solid fa-mug-hot"></i>
+                </a>
+                <a href="#about" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-medium px-8 py-4 rounded-full border border-white/30 transition-all duration-300">
+                    <span>Біз туралы</span>
+                </a>
+            </div>
+
+            <!-- Features Quick Badges -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 pt-12 max-w-2xl mx-auto border-t border-white/10">
+                <div class="flex items-center justify-center gap-3 text-coffee-beige text-xs sm:text-sm">
+                    <i class="fa-solid fa-leaf text-coffee-accent"></i>
+                    <span>100% Арабика</span>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-coffee-beige text-xs sm:text-sm">
+                    <i class="fa-solid fa-heart text-coffee-accent"></i>
+                    <span>Жайлы атмосфера</span>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-coffee-beige text-xs sm:text-sm col-span-2 md:col-span-1">
+                    <i class="fa-solid fa-cookie text-coffee-accent"></i>
+                    <span>Балғын десерттер</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-coffee-warm font-semibold text-sm uppercase tracking-wider">Дәмді сусындар мен тәттілер</span>
+            <h2 class="font-playfair text-3xl sm:text-5xl font-bold text-coffee-dark mt-2 mb-4">🍰 Мәзір</h2>
+            <div class="w-16 h-1 bg-coffee-accent mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex justify-center gap-2 sm:gap-4 mb-12 overflow-x-auto pb-2">
+            <button onclick="filterMenu('all')" id="tab-all" class="menu-tab active bg-coffee-roast text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm">
+                Барлығы
+            </button>
+            <button onclick="filterMenu('coffee')" id="tab-coffee" class="menu-tab bg-white text-coffee-roast hover:bg-coffee-light border border-coffee-beige px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm">
+                ☕ Кофе
+            </button>
+            <button onclick="filterMenu('dessert')" id="tab-dessert" class="menu-tab bg-white text-coffee-roast hover:bg-coffee-light border border-coffee-beige px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm">
+                🥐 Десерттер
+            </button>
+            <button onclick="filterMenu('cold')" id="tab-cold" class="menu-tab bg-white text-coffee-roast hover:bg-coffee-light border border-coffee-beige px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm">
+                🧋 Салқын сусындар
+            </button>
+        </div>
+
+        <!-- Menu Grid Container -->
+        <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Items rendered via JS for interactive ease -->
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="mt-12 text-center p-4 rounded-xl bg-coffee-light/50 border border-coffee-beige/60 max-w-xl mx-auto">
+            <p class="text-xs text-coffee-medium flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-info text-coffee-warm"></i>
+                <span>Бұл бағалар оқу жобасына арналған ойдан шығарылған мысалдар.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-24 bg-gradient-to-b from-coffee-light/40 to-coffee-bg relative overflow-hidden border-y border-coffee-beige/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                
+                <!-- Left Column - Image Stack -->
+                <div class="relative">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Cozy Cafe Interior" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <!-- Overlay secondary picture -->
+                    <div class="absolute -bottom-8 -right-6 w-1/2 aspect-square rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden sm:block">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600&auto=format&fit=crop" 
+                             alt="Coffee Preparation" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <!-- Badge -->
+                    <div class="absolute -top-6 -left-6 bg-coffee-roast text-coffee-beige p-6 rounded-2xl shadow-xl hidden sm:block">
+                        <span class="font-playfair text-3xl font-bold block text-white">100%</span>
+                        <span class="text-xs tracking-wider uppercase">Сапа & Дәм</span>
+                    </div>
+                </div>
+
+                <!-- Right Column - Text Content -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 text-coffee-warm font-semibold text-sm uppercase tracking-wider">
+                        <i class="fa-solid fa-store"></i>
+                        <span>Біздің оқиғамыз</span>
+                    </div>
+
+                    <h2 class="font-playfair text-3xl sm:text-5xl font-bold text-coffee-dark leading-tight">
+                        🏠 Біз туралы
+                    </h2>
+
+                    <p class="text-coffee-roast/90 text-lg leading-relaxed font-light">
+                        <strong class="font-semibold text-coffee-dark">TIME COFFEE</strong> — жай ғана кофе ішетін орын емес. 
+                        Біздің кофехана адамдардың демалып, достарымен кездесіп, кітап оқып немесе өзімен-өзі тыныш уақыт өткізуіне арналған.
+                    </p>
+
+                    <p class="text-coffee-roast/80 text-base leading-relaxed">
+                        Біз жайлы интерьерді, сапалы сусындарды және жылы атмосфераны бір жерде біріктіруге тырысамыз. 
+                        Әрбір шыны кофе арнайы іріктелген дәннен сіз үшін сүйіспеншілікпен дайындалады.
+                    </p>
+
+                    <!-- Feature Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-white/80 border border-coffee-beige/40 shadow-sm">
+                            <div class="p-2 bg-coffee-light rounded-lg text-coffee-warm">
+                                <i class="fa-solid fa-mug-saucer text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-coffee-dark text-sm">Балғын өнімдер</h4>
+                                <p class="text-xs text-coffee-medium mt-0.5">Күн сайын дайындалатын тәттілер</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-white/80 border border-coffee-beige/40 shadow-sm">
+                            <div class="p-2 bg-coffee-light rounded-lg text-coffee-warm">
+                                <i class="fa-solid fa-couch text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-coffee-dark text-sm">Жайлы орта</h4>
+                                <p class="text-xs text-coffee-medium mt-0.5">Тыныш әрі жылы атмосфера</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <span class="text-coffee-warm font-semibold text-sm uppercase tracking-wider">Суреттер сөйлейді</span>
+            <h2 class="font-playfair text-3xl sm:text-5xl font-bold text-coffee-dark mt-2 mb-4">📸 Галерея</h2>
+            <div class="w-16 h-1 bg-coffee-accent mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Gallery Item 1 -->
+            <div onclick="openLightbox(0)" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer aspect-[4/3] bg-coffee-roast">
+                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=800&auto=format&fit=crop" 
+                     alt="Жайлы атмосфера" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="text-xs uppercase tracking-widest text-coffee-accent font-semibold">TIME COFFEE</span>
+                    <h3 class="text-xl font-bold font-playfair mt-1">Жайлы атмосфера</h3>
+                </div>
+            </div>
+
+            <!-- Gallery Item 2 -->
+            <div onclick="openLightbox(1)" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer aspect-[4/3] bg-coffee-roast">
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop" 
+                     alt="Жаңа дайындалған кофе" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="text-xs uppercase tracking-widest text-coffee-accent font-semibold">TIME COFFEE</span>
+                    <h3 class="text-xl font-bold font-playfair mt-1">Жаңа дайындалған кофе</h3>
+                </div>
+            </div>
+
+            <!-- Gallery Item 3 -->
+            <div onclick="openLightbox(2)" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer aspect-[4/3] bg-coffee-roast">
+                <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop" 
+                     alt="Тәтті сәттер" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="text-xs uppercase tracking-widest text-coffee-accent font-semibold">TIME COFFEE</span>
+                    <h3 class="text-xl font-bold font-playfair mt-1">Тәтті сәттер</h3>
+                </div>
+            </div>
+
+            <!-- Gallery Item 4 -->
+            <div onclick="openLightbox(3)" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer aspect-[4/3] bg-coffee-roast">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop" 
+                     alt="Достармен бірге" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="text-xs uppercase tracking-widest text-coffee-accent font-semibold">TIME COFFEE</span>
+                    <h3 class="text-xl font-bold font-playfair mt-1">Достармен бірге</h3>
+                </div>
+            </div>
+
+            <!-- Gallery Item 5 -->
+            <div onclick="openLightbox(4)" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer aspect-[4/3] bg-coffee-roast">
+                <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=800&auto=format&fit=crop" 
+                     alt="Өзіңе арналған уақыт" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="text-xs uppercase tracking-widest text-coffee-accent font-semibold">TIME COFFEE</span>
+                    <h3 class="text-xl font-bold font-playfair mt-1">Өзіңе арналған уақыт</h3>
+                </div>
+            </div>
+
+            <!-- Gallery Extra Item 6 -->
+            <div onclick="openLightbox(5)" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer aspect-[4/3] bg-coffee-roast">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" 
+                     alt="Кофе және демалыс" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="text-xs uppercase tracking-widest text-coffee-accent font-semibold">TIME COFFEE</span>
+                    <h3 class="text-xl font-bold font-playfair mt-1">Жайлылық пен сапа</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl hover:text-coffee-accent">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-4xl w-full text-center space-y-4">
+            <img id="lightbox-img" src="" alt="Gallery Preview" class="max-h-[80vh] mx-auto rounded-xl object-contain shadow-2xl">
+            <h3 id="lightbox-caption" class="text-white text-2xl font-playfair font-semibold"></h3>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-coffee-roast text-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-coffee-accent font-semibold text-sm uppercase tracking-wider">Күтеміз</span>
+                <h2 class="font-playfair text-3xl sm:text-5xl font-bold text-amber-50 mt-2 mb-4">📍 Бізбен байланыс</h2>
+                <div class="w-16 h-1 bg-coffee-accent mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                
+                <!-- Contact Information Cards -->
+                <div class="space-y-6">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Location -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-coffee-accent/50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-coffee-accent/20 flex items-center justify-center text-coffee-accent text-2xl mb-4">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <h3 class="text-sm uppercase tracking-wider text-coffee-beige font-medium">Мекенжай</h3>
+                            <p class="text-lg font-semibold text-white mt-1">Алматы қаласы</p>
+                        </div>
+
+                        <!-- Working Hours -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-coffee-accent/50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-coffee-accent/20 flex items-center justify-center text-coffee-accent text-2xl mb-4">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <h3 class="text-sm uppercase tracking-wider text-coffee-beige font-medium">Жұмыс уақыты</h3>
+                            <p class="text-lg font-semibold text-white mt-1">Күн сайын, 09:00–22:00</p>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-coffee-accent/50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-coffee-accent/20 flex items-center justify-center text-coffee-accent text-2xl mb-4">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <h3 class="text-sm uppercase tracking-wider text-coffee-beige font-medium">Телефон</h3>
+                            <p class="text-lg font-semibold text-white mt-1">+7 (700) 000-00-00</p>
+                        </div>
+
+                        <!-- Instagram -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-coffee-accent/50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-coffee-accent/20 flex items-center justify-center text-coffee-accent text-2xl mb-4">
+                                <i class="fa-brands fa-instagram"></i>
+                            </div>
+                            <h3 class="text-sm uppercase tracking-wider text-coffee-beige font-medium">Instagram</h3>
+                            <p class="text-lg font-semibold text-white mt-1">@timecoffee.kz</p>
+                        </div>
+                    </div>
+
+                    <!-- Note -->
+                    <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs">
+                        <i class="fa-solid fa-circle-exclamation mr-2"></i>
+                        <span>Телефон мен Instagram — оқу жобасы үшін ойдан шығарылған деректер.</span>
+                    </div>
+                </div>
+
+                <!-- Contact / Feedback Form -->
+                <div class="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md">
+                    <h3 class="text-2xl font-playfair font-bold text-white mb-2">Хабарлама қалдыру</h3>
+                    <p class="text-sm text-coffee-beige/80 mb-6">Сұрақтарыңыз немесе ұсыныстарыңыз болса, жазыңыз!</p>
+
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-coffee-beige mb-2">Атыңыз</label>
+                            <input type="text" required placeholder="Мысалы: Арайлым" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-coffee-accent transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-coffee-beige mb-2">Телефон нөміріңіз</label>
+                            <input type="tel" required placeholder="+7 (700) 000-00-00" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-coffee-accent transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-coffee-beige mb-2">Хабарламаңыз</label>
+                            <textarea rows="4" required placeholder="Пікіріңізді немесе тапсырысыңызды жазыңыз..." class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-coffee-accent transition"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-coffee-accent hover:bg-amber-600 text-coffee-dark font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-xl">
+                            Жіберу
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+        <div class="w-full max-w-md bg-white h-full shadow-2xl flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-coffee-beige">
+                    <h3 class="font-playfair text-2xl font-bold text-coffee-dark">Сіздің тапсырысыңыз</h3>
+                    <button onclick="toggleCartModal()" class="text-coffee-medium hover:text-coffee-dark text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div id="cart-items" class="py-6 space-y-4">
+                    <!-- Cart items will be rendered here -->
+                    <p class="text-center text-coffee-medium py-8">Себетіңіз әлі бос.</p>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-coffee-beige space-y-4">
+                <div class="flex justify-between items-center text-lg font-bold text-coffee-dark">
+                    <span>Жалпы сомасы:</span>
+                    <span id="cart-total">0 ₸</span>
+                </div>
+                <button onclick="checkoutCart()" class="w-full bg-coffee-roast hover:bg-coffee-dark text-white font-bold py-3.5 rounded-xl transition shadow-md">
+                    Тапсырысты растау
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-coffee-dark text-white px-6 py-3 rounded-xl shadow-2xl border border-coffee-accent flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-coffee-accent"></i>
+        <span id="toast-msg">Тауар себетке қосылды!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-coffee-dark text-coffee-beige/70 py-12 border-t border-white/10 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">☕</span>
+                <div>
+                    <span class="font-playfair text-lg font-bold text-white block">TIME COFFEE</span>
+                    <span class="text-xs">Өзіңе уақыт бөл.</span>
+                </div>
+            </div>
+
+            <p class="text-center sm:text-right">
+                &copy; 2026 TIME COFFEE. Барлық құқықтар қорғалған. <br>
+                <span class="text-xs text-coffee-accent">Оқу жобасына арналған сайт.</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Menu Data
+        const menuData = [
+            // Кофе
+            { id: 1, category: 'coffee', name: 'Капучино', price: 1500, img: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=500&auto=format&fit=crop', desc: 'Жұмсақ сүт көбігі бар классикалық капучино.' },
+            { id: 2, category: 'coffee', name: 'Латте', price: 1600, img: 'https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=500&auto=format&fit=crop', desc: 'Нәзік эспрессо мен ысытылған сүт үйлесімі.' },
+            { id: 3, category: 'coffee', name: 'Американо', price: 1200, img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=500&auto=format&fit=crop', desc: 'Қанық эспрессо және ыстық су.' },
+            { id: 4, category: 'coffee', name: 'Эспрессо', price: 1000, img: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=500&auto=format&fit=crop', desc: 'Күшті әрі хош иісті кофе шот.' },
+            { id: 5, category: 'coffee', name: 'Карамельді латте', price: 1800, img: 'https://images.unsplash.com/photo-1593443320739-77f74939d0da?q=80&w=500&auto=format&fit=crop', desc: 'Тәтті карамель сиропы қосылған латте.' },
+            
+            // Десерттер
+            { id: 6, category: 'dessert', name: 'Чизкейк', price: 1800, img: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=500&auto=format&fit=crop', desc: 'Нәзік ірімшіктен дайындалған классикалық десерт.' },
+            { id: 7, category: 'dessert', name: 'Тирамису', price: 1900, img: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?q=80&w=500&auto=format&fit=crop', desc: 'Италиялық кофе хош иісті десерт.' },
+            { id: 8, category: 'dessert', name: 'Шоколадты торт', price: 1700, img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=500&auto=format&fit=crop', desc: 'Қанық шоколадты крем және жұмсақ корж.' },
+            { id: 9, category: 'dessert', name: 'Круассан', price: 1300, img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=500&auto=format&fit=crop', desc: 'Французша қытырлақ майлы круассан.' },
+
+            // Салқын сусындар
+            { id: 10, category: 'cold', name: 'Лимонад', price: 1500, img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=500&auto=format&fit=crop', desc: 'Балғын лимон мен мұздай салқын сусын.' },
+            { id: 11, category: 'cold', name: 'Мұзды латте', price: 1700, img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=500&auto=format&fit=crop', desc: 'Мұз текшелері бар сергіткіш латте.' },
+            { id: 12, category: 'cold', name: 'Жемісті шай', price: 1600, img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=500&auto=format&fit=crop', desc: 'Жемістер мен жидектер қосылған салқын шай.' }
+        ];
+
+        // Lightbox Gallery Data
+        const galleryData = [
+            { src: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1200&auto=format&fit=crop', title: 'Жайлы атмосфера' },
+            { src: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop', title: 'Жаңа дайындалған кофе' },
+            { src: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=1200&auto=format&fit=crop', title: 'Тәтті сәттер' },
+            { src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop', title: 'Достармен бірге' },
+            { src: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1200&auto=format&fit=crop', title: 'Өзіңе арналған уақыт' },
+            { src: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop', title: 'Жайлылық пен сапа' }
+        ];
+
+        let cart = [];
+
+        // Render Menu Items
+        function renderMenu(category = 'all') {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? menuData 
+                : menuData.filter(item => item.category === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <span class="absolute top-3 right-3 bg-coffee-dark/80 backdrop-blur-md text-amber-200 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/20">
+                                ${item.price.toLocaleString('kk-KZ')} ₸
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-playfair text-xl font-bold text-coffee-dark">${item.name}</h3>
+                            <p class="text-xs text-coffee-medium mt-2 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <button onclick="addToCart(${item.id})" class="w-full bg-coffee-light hover:bg-coffee-accent hover:text-coffee-dark text-coffee-roast font-semibold py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Қосу</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter Menu Tabs
+        function filterMenu(category) {
+            document.querySelectorAll('.menu-tab').forEach(tab => {
+                tab.classList.remove('bg-coffee-roast', 'text-white');
+                tab.classList.add('bg-white', 'text-coffee-roast');
+            });
+
+            const activeTab = document.getElementById(`tab-${category}`);
+            if (activeTab) {
+                activeTab.classList.remove('bg-white', 'text-coffee-roast');
+                activeTab.classList.add('bg-coffee-roast', 'text-white');
+            }
+
+            renderMenu(category);
+        }
+
+        // Shopping Cart Functions
+        function addToCart(id) {
+            const item = menuData.find(i => i.id === id);
+            const existing = cart.find(i => i.id === id);
+
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(`${item.name} себетке қосылды!`);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            // Badge update
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Items render
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-center text-coffee-medium py-8">Себетіңіз әлі бос.</p>';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-coffee-light/40 border border-coffee-beige">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover">
+                            <div>
+                                <h4 class="font-bold text-sm text-coffee-dark">${item.name}</h4>
+                                <span class="text-xs text-coffee-warm">${item.price.toLocaleString('kk-KZ')} ₸</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 rounded-full bg-white text-coffee-dark font-bold text-xs shadow">-</button>
+                            <span class="text-xs font-bold">${item.qty}</span>
+                            <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 rounded-full bg-white text-coffee-dark font-bold text-xs shadow">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            cartTotal.innerText = `${totalPrice.toLocaleString('kk-KZ')} ₸`;
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            updateCartUI();
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function checkoutCart() {
+            if (cart.length === 0) {
+                showToast('Себет бос!');
+                return;
+            }
+            showToast('Тапсырыс қабылданды! Алғысымызды білдіреміз.');
+            cart = [];
+            updateCartUI();
+            toggleCartModal();
+        }
+
+        // Lightbox Functions
+        function openLightbox(index) {
+            const item = galleryData[index];
+            if (item) {
+                document.getElementById('lightbox-img').src = item.src;
+                document.getElementById('lightbox-caption').innerText = item.title;
+                document.getElementById('lightbox').classList.remove('hidden');
+            }
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        // Navigation Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toast Message
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Contact Form Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showToast('Хабарламаңыз сәтті жіберілді!');
+            e.target.reset();
+        }
+
+        // Initialization
+        window.onload = function() {
+            renderMenu('all');
+        };
+    </script>
+</body>
+</html>
